@@ -5,19 +5,33 @@
 #ifndef PIDCONTROLLER_H
 #define PIDCONTROLLER_H
 
+// ==============================================================================
+// Class
+// ==============================================================================
+
 class PIDController {
+
 public:
-    // Costruttore
-    PIDController(double kp, double ki, double kd)
-        : kp_(kp), ki_(ki), kd_(kd), prev_error_(0.0), integral_(0.0) {}
 
-    // Metodo per calcolare l'output PID
+    // ==============================================================================
+    // Constructor and Destructor
+    // ==============================================================================
+    PIDController(double kp, double ki, double kd);
+
+    // ==============================================================================
+    // Additional Functions
+    // ==============================================================================
     double compute(double target, double current, double dt);
-
+#
 private:
-    double kp_, ki_, kd_;         // Coefficienti PID
-    double prev_error_;           // Errore precedente
-    double integral_;             // Somma degli errori per la componente integrale
+
+    // ==============================================================================
+    // Variables
+    // ==============================================================================
+    double kp_, ki_, kd_;       // PID coefficient
+    double previousError_;      // for the derivative part
+    double integral_;           // sum of the errors for the integral part
+    double output_ = 0;
 };
 
 #endif // PIDCONTROLLER_H
