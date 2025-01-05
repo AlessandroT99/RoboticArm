@@ -13,7 +13,11 @@ find_package(rclcpp REQUIRED)
 include_directories(include/controllers_pkg)
 
 # Aggiungi il file sorgente
-add_library(controllers_pkg src/PIDController.cpp)
+add_library(controllers_pkg
+        src/PIDController.cpp
+        src/JointControllers.cpp
+        src/YAMLParser.cpp)
+
 target_link_libraries(controllers_pkg rclcpp::rclcpp)
 
 # Specifica la directory di installazione degli header
