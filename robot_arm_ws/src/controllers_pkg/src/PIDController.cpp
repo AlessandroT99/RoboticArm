@@ -4,8 +4,8 @@
 
 #include "PIDController.h"
 
-PIDController::PIDController(double kp, double ki, double kd)
-    : kp_(kp), ki_(ki), kd_(kd), previousError_(0.0), integral_(0.0) {}
+PIDController::PIDController(const std::string &joint_name, double kp, double ki, double kd)
+    : joint_name_(joint_name), kp_(kp), ki_(ki), kd_(kd), previousError_(0.0), integral_(0.0) {}
 
 double PIDController::compute(double target, double current, double dt) {
     double currentError = target - current;

@@ -4,6 +4,7 @@
 
 #ifndef PIDCONTROLLER_H
 #define PIDCONTROLLER_H
+#include <string>
 
 // ==============================================================================
 // Class
@@ -16,7 +17,7 @@ public:
     // ==============================================================================
     // Constructor and Destructor
     // ==============================================================================
-    PIDController(double kp, double ki, double kd);
+    PIDController(const std::string &joint_name, double kp, double ki, double kd);
 
     // ==============================================================================
     // Additional Functions
@@ -28,6 +29,7 @@ private:
     // ==============================================================================
     // Variables
     // ==============================================================================
+    std::string joint_name_ = "JointWithoutName";
     double kp_, ki_, kd_;       // PID coefficient
     double previousError_;      // for the derivative part
     double integral_;           // sum of the errors for the integral part
