@@ -1,0 +1,8 @@
+services:
+  ros-jazzy:
+    image: ros_custom:latest
+    container_name: ros_jazzy
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    network_mode: host
