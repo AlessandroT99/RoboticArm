@@ -24,7 +24,7 @@ def generate_launch_description():
     ld.add_action(rviz_arg)
 
     # This parameter has changed its meaning slightly from previous versions
-    default_model_path = PathJoinSubstitution([pkg_default_path, 'robots', 'three_joints_arm.xacro'])
+    default_model_path = PathJoinSubstitution([pkg_default_path, 'robots', 'arm.xacro'])
     ld.add_action(DeclareLaunchArgument(name='model', default_value=default_model_path,
                                         description='Path to robot urdf file relative to urdf_tutorial package'))
 

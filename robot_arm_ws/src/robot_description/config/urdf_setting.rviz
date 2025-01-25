@@ -17,19 +17,45 @@ Visualization Manager:
     - Class: rviz_default_plugins/TF
       Name: TF
       Value: true
+      Show Arrows: false
+      Show Axes: true
+      Show Names: false
   Global Options:
-    Fixed Frame: base_link
+    Fixed Frame: world
   Tools:
     - Class: rviz_default_plugins/MoveCamera
   Value: true
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 1.7
+      Distance: 3.6408278942108154
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.05999999865889549
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 1
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.05000000074505806
+      Invert Z Axis: false
       Name: Current View
-      Pitch: 0.33
+      Near Clip Distance: 0.009999999776482582
+      Pitch: 0.33000001311302185
+      Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
       Yaw: 5.5
+    Saved: ~
 Window Geometry:
-  Height: 800
-  Width: 1200
+  Displays:
+    collapsed: false
+  Height: 1003
+  Hide Left Dock: false
+  Hide Right Dock: false
+  Views:
+    collapsed: false
+  Width: 1854
+  X: 66
+  Y: 40
