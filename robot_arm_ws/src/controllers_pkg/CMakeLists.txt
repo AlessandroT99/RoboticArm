@@ -25,9 +25,7 @@ install(DIRECTORY include/ DESTINATION include)
 
 # Specifica la directory di installazione della libreria
 install(TARGETS controllers_pkg
-        ARCHIVE DESTINATION lib
-        LIBRARY DESTINATION lib
-        RUNTIME DESTINATION bin)
+        DESTINATION lib)
 
 # Informa ament del target da installare
 ament_export_dependencies(rclcpp)

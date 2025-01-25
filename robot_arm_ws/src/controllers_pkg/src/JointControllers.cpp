@@ -12,8 +12,5 @@ JointControllers::JointControllers() : Node("arm_controllers")
     controllers = controllerConfig.loadControllersConfiguration();
 
 
-    }
-
-
-
 }
+
