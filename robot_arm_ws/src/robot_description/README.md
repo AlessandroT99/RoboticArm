@@ -26,16 +26,6 @@ This ROS 2 package contains the URDF/Xacro description, configuration files, and
 - **RViz Visualization**: Launch file and configuration for visualizing the robot in RViz.
 - **Controller Integration**: Example configuration for `ros2_control` to manage the robot's actuators and joints (to be developed).
 
-## Usage
-
-### 1. Launch RViz Visualization
-To visualize the robot in RViz, use the following command:
-```bash
-ros2 launch robot_description robot_rviz.launch.py
-```
-
-### 3. Extend the Description
-The robot's description can be modified or extended by editing the `robots/three_joints_arm.xacro` file. Refer to the [URDF documentation](https://wiki.ros.org/urdf) and [Xacro documentation](https://wiki.ros.org/xacro) for syntax and examples.
 
 ## Dependencies
 
@@ -50,11 +40,22 @@ Make sure to install these dependencies before using the package.
 To install the dependencies for a generic ROS 2 version, use the following commands:
 ```bash
 sudo apt update
-sudo apt install ros-<ros2-distro>-robot-state-publisher
-sudo apt install ros-<ros2-distro>-ros2-control
-sudo apt install ros-<ros2-distro>-rviz2
+sudo apt install ros-$ROS-DISTRO-robot-state-publisher
+sudo apt install ros-$ROS-DISTRO-ros2-control
+sudo apt install ros-$ROS-DISTRO-rviz2
 ```
-Replace `<ros2-distro>` with your ROS 2 distribution (e.g., `humble`, `foxy`, `rolling`). In this project we are using the [`jazzy`](https://docs.ros.org/en/jazzy/index.html) version.
+`$ROS-DISTRO` will be automatically replaced with your ROS 2 distribution (e.g., `humble`, `foxy`, `rolling`). In this project we are using the [`jazzy`](https://docs.ros.org/en/jazzy/index.html) version.
+
+## Usage
+
+### 1. Launch RViz Visualization
+To visualize the robot in RViz, use the following command:
+```bash
+ros2 launch robot_description robot_rviz.launch.py
+```
+
+### 3. Extend the Description
+The robot's description can be modified or extended by editing the `robots/three_joints_arm.xacro` file. Refer to the [URDF documentation](https://wiki.ros.org/urdf) and [Xacro documentation](https://wiki.ros.org/xacro) for syntax and examples.
 
 ## References
 
