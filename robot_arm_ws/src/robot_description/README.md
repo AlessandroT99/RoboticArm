@@ -40,11 +40,11 @@ Make sure to install these dependencies before using the package.
 To install the dependencies for a generic ROS 2 version, use the following commands:
 ```bash
 sudo apt update
-sudo apt install ros-$ROS-DISTRO-robot-state-publisher
-sudo apt install ros-$ROS-DISTRO-ros2-control
-sudo apt install ros-$ROS-DISTRO-rviz2
+sudo apt install ros-$ROS_DISTRO-robot-state-publisher
+sudo apt install ros-$ROS_DISTRO-ros2-control
+sudo apt install ros-$ROS_DISTRO-rviz2
 ```
-`$ROS-DISTRO` will be automatically replaced with your ROS 2 distribution (e.g., `humble`, `foxy`, `rolling`). In this project we are using the [`jazzy`](https://docs.ros.org/en/jazzy/index.html) version.
+`$ROS_DISTRO` will be automatically replaced with your ROS 2 distribution (e.g., `humble`, `foxy`, `rolling`). In this project we are using the [`jazzy`](https://docs.ros.org/en/jazzy/index.html) version.
 
 ## Usage
 
