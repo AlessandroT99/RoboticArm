@@ -15,6 +15,10 @@
   <!-- Include rviz materials list-->
   <xacro:include filename="$(find robot_description)/robots/materials.xacro" />
 
+  <xacro:include filename="$(find robot_description)/ros2_control/robot_ros2_control.urdf.xacro"/>
+  <xacro:arm_ros2_control />
+  <xacro:include filename="$(find robot_description)/ros2_control/gazebo_sim_ros2_control.urdf.xacro"/>
+
   <!-- Used for fixing robot to Gazebo 'base_link' -->
   <link name="world"/>
 

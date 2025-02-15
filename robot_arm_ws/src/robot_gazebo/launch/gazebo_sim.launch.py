@@ -1,74 +1,75 @@
+import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import PathJoinSubstitution, Command, LaunchConfiguration
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.actions import Node
-from launch_ros.parameter_descriptions import ParameterValue
-from launch_ros.substitutions import FindPackageShare
-from launch.substitutions import Command
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-import os
-import xacro
-
-
 
 def generate_launch_description():
-    ld = LaunchDescription()
 
-    pkg_default_path = FindPackageShare('robot_description')
+    pkg_ros_gz_sim = FindPackageShare(package='ros_gz_sim').find('ros_gz_sim')
+    pkg_share_gazebo = FindPackageShare(package='robot_gazebo').find('robot_gazebo')
+    pkg_share_description = FindPackageShare(package='robot_description').find('robot_description')
 
-    # These parameters are maintained for backwards compatibility
-    gui_arg = DeclareLaunchArgument(name='gui', default_value='true',
-                                    description='Flag to enable joint_state_publisher_gui')
-    ld.add_action(gui_arg)
+    world_path = PathJoinSubstitution([pkg_share_gazebo,'world','basic_world.sdf'])
     
-    default_rviz_config_path = PathJoinSubstitution([pkg_default_path, 'config', 'urdf_setting.rviz'])
-    rviz_arg = DeclareLaunchArgument(name='rvizconfig', default_value=default_rviz_config_path,
-                                     description='Absolute path to rviz config file')
-    ld.add_action(rviz_arg)
+    default_model_path = PathJoinSubstitution([pkg_share_description, 'robots', 'arm.urdf.xacro'])
+    robot_description_config = Command(['xacro ', default_model_path])
 
-    # This parameter has changed its meaning slightly from previous versions
-    default_model_path = PathJoinSubstitution([pkg_default_path, 'robots', 'three_joints_arm.xacro'])
-    ld.add_action(DeclareLaunchArgument(name='model', default_value=default_model_path,
-                                        description='Path to robot urdf file relative to urdf_tutorial package'))
 
-    robot_description_content = ParameterValue(Command(['xacro ', LaunchConfiguration('model')]), value_type=str)
-
+    #-------------------------------------------------------------    
     robot_state_publisher_node = Node(package='robot_state_publisher',
                                       executable='robot_state_publisher',
-                                      parameters=[{
-                                          'robot_description': robot_description_content,
-                                      }])
+                                      parameters=[
+                                          {'robot_description': robot_description_config}])
 
-    ld.add_action(robot_state_publisher_node)
+    gz_sim_launch_file = os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')
 
-    ld.add_action(Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-    ))
-
-    ld.add_action(Node(
-        package='rviz2',
-        executable='rviz2',
-        output='screen',
-        arguments=['-d', LaunchConfiguration('rvizconfig')],
-    ))
-
-    gazebo_world_path = PathJoinSubstitution([FindPackageShare('robot_gazebo'), 'world', 'basic_world.sdf'])
-    ld.add_action(DeclareLaunchArgument(name='world', default_value=gazebo_world_path,
-                                        description='Path to world file .sdf'))
+    start_gazebo_cmd = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(gz_sim_launch_file),
+        launch_arguments={
+            'gz_args': [' -r -v 4 ', world_path], 
+            'on_exit_shutdown': 'true'}
+            .items())
     
-    ld.add_action(IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    FindPackageShare('ros_gz_sim'), 'launch'), '/gz_sim.launch.py']),
-                launch_arguments=[
-                    ('gz_args', [LaunchConfiguration('world'),
-                                 '.sdf',
-                                 ' -v 4',
-                                 ' -r']
-                    )
-                ]
-             ))
+    start_gazebo_ros_spawner_cmd = Node(
+        package='ros_gz_sim',
+        executable='create',
+        output='screen',
+        arguments=[
+            '-topic', '/robot_description',
+            '-name', 'simple_robot_arm',
+            '-allow_renaming', 'true'])
 
+    joint_state_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+    )
 
+    arm_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["arm_controller", "--controller-manager", "/controller_manager"],
+    )
+    
+    start_gazebo_ros_bridge_cmd = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        parameters=[{
+            'config_file': os.path.join(pkg_share_gazebo, 'config', 'ros_gz_bridge.yaml'),
+        }],
+        output='screen'
+    )
+
+    ld = LaunchDescription()
+    ld.add_action(DeclareLaunchArgument(name='model', default_value=default_model_path,
+                                        description='Path to robot urdf file relative to urdf_tutorial package'))
+    ld.add_action(robot_state_publisher_node)
+    ld.add_action(start_gazebo_cmd)
+    ld.add_action(start_gazebo_ros_bridge_cmd)
+    ld.add_action(start_gazebo_ros_spawner_cmd)
+    ld.add_action(arm_controller_spawner)
+    ld.add_action(joint_state_broadcaster_spawner)
     return ld
