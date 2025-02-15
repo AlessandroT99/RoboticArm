@@ -1,8 +1,5 @@
 ## Package Overview
 
-### 1. **`controllers_pkg`**
-This package is dedicated to developing custom controllers for the robotic arm. It includes the logic and algorithms necessary to control the arm's movements.
-
 ### 2. **`robot_description`**
 This package contains the robot's URDF/Xacro description, RViz configurations, and controller settings. 
 
@@ -24,7 +21,7 @@ The architecture of your new C++ package will look like this:
 
     ├── CMakeLists.txt  
     ├── include  
-    │   └── cpp_package_name  
+    │   └── cpp_package_name  
     ├── package.xml  
     └── src
 ```
@@ -42,3 +39,33 @@ or
 colcon build --packages-select cpp_package_name
 ```
 to build a specific package.
+
+
+## Rum the simulation
+
+Execute the following command in a single terminal, and make sure to have the most updated version of the branch.
+```bash
+
+cd ~/path_to_your_workspace/robot_arm_ws
+
+colcon build
+
+ros2 launch robot_gazebo gazebo_sim.launch.py
+
+```
+In my case it will be 
+```bash
+
+cd ~/Documents/RoboticArm/robot_arm_ws
+
+colcon build
+
+ros2 launch robot_gazebo gazebo_sim.launch.py
+
+```
+
+Once the simulation is running, up to now the only way to move the robot is using command in the terminal. So open a new terminal and use to following command to set the new goal positions of all the joints:
+```bash
+ros2 topic pub --once /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "{joint_names: ['joint1', 'joint2', 'joint3'], points: [{positions: [x.x, x.x, x.x], time_from_start: {sec: 3.0}}]}"
+```
+Change the **x.x** with the value that you want.
